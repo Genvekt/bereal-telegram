@@ -4,7 +4,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, JobQueue, Job
 import random
 from functools import partial
-from datetime import timedelta
+from datetime import timedelta, datetime, timezone
 
 class Bot:
     def __init__(self, job_queue: JobQueue):
@@ -13,6 +13,10 @@ class Bot:
         self.running_jobs: Dict[str, Job] = dict()
 
     async def broadcast_reminder(self, context: ContextTypes.context, chat_id: int):
+        # Не запускаться вне промежутка 10:00 - 20:00 МСК
+        now = datetime.now(timezone.utc)
+        if now.hour < 7 or now.hour > 17:
+            return
         must_send = random.random() > 0.5
         if must_send and chat_id in self.users:
             await context.bot.send_message(
