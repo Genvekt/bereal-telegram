@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 @dataclass
 class Settings:
     TELEGRAM_TOKEN: str
+    DEVELOPER_CHAT_ID: int
 
 
 def load_settings(prefix: str = 'BEREAL_') -> Settings:
